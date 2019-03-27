@@ -1,0 +1,194 @@
+```{r eval=FALSE, echo=FALSE, message=FALSE}
+library(knitr)
+library(markdown)
+library(Cairo)
+
+knit("tutorial.rmd","tutorial.md")
+markdownToHTML("tutorial.md","tutorial.html")
+```
+
+```{r echo=FALSE, message=FALSE}
+opts_chunk$set(warning=FALSE, fig.width=6, fig.height=6, dev="CairoPNG", stop=TRUE)
+```
+
+## Running an epigenome-wide association study (EWAS) in `ewaff`
+
+### Preparing R
+
+We first load the `ewaff` library.
+```{r}
+library(ewaff)
+```
+
+We indicate how many processors are available for performing analyses.
+If this is not set explicitly, then the default is to use only
+a single processor.
+```{r}
+options(mc.cores=4)
+```
+
+### Load a dataset
+
+We will in fact generate a random dataset for this demonstration.
+```{r}
+set.seed(20171031)
+n <- 500 ## n samples
+s <- 100  ## s features/cpg sites
+
+## variable of interest and covariates
+data <- data.frame(variable=c(rep("A",n/2), rep("B",n/2)),      ## variable of interest (two groups)
+                   continuous=rnorm(n),                         ## continuous covariate
+                   categorical=factor(sample(0:3,n,replace=T)), ## categorical covariate
+                   batch=factor(sample(0:2, size=n, replace=T)))        ## 3 batches
+
+## correlation of each cpg site with the variable of interest
+r <- runif(s, min=-1, max=1)
+
+## methylation matrix randomly generated
+## with batch effects and associations with the variable
+## of interest (rows=cpg sites, cols=samples)
+methylation <- t(sapply(r, function(r) {
+    v <- as.numeric(data$variable)
+    b <- data$batch
+    ## batch effect
+    b <- rnorm(unique(b), mean=0, sd=0.2)[b]
+    ## noise
+    e <- rnorm(length(v), mean=0, sd=sqrt(1-r^2))
+    ## mean
+    m <- runif(1, min=0.2, max=0.8)
+    ## signal with mean=0, sd=1
+    y <- (r*scale(v) + b + e)
+    ## signal with mean=m, sd such that signal is 0..1
+    f <- runif(1, min=0, max=min(m,1-m)/max(abs(y)))
+    y <- y*f + m
+    ## return result
+    y
+}))
+rownames(methylation) <- paste("s", 1:nrow(methylation), sep="")
+colnames(methylation) <- paste("p", 1:ncol(methylation), sep="")
+
+## specify cpg site locations
+manifest <- data.frame(chr=c(rep(1,s/2), rep(2,s/2)), pos=sample(1:(150*s), s))
+manifest <- manifest[order(manifest$chr, manifest$pos),]
+
+## generate 10 likely outliers
+outliers <- cbind(sample(1:nrow(methylation), 10, replace=T),
+                  sample(1:ncol(methylation), 10, replace=T))
+methylation[outliers] <- ifelse(rowMeans(methylation)[outliers[,1]] > 0.5, 0, 1)
+```
+
+### Handling outliers
+
+We use the 'iqr' method for handling outliers.5B
+The 'iqr' method sets methylation levels that are outside
+3*IQR of a CpG site to NA.
+```{r}
+methylation <- ewaff.handle.outliers(methylation, method="iqr")[[1]]
+```
+
+We can check that most of the outliers added to the dataset in the simulation
+were set to NA.
+```{r}
+## outliers added
+outliers
+## outliers identified
+which(is.na(methylation), arr.ind=T)
+```
+Some 'outliers' were missed because they are not actually outliers.
+
+### Running the EWAS
+
+Now we run the EWAS.  Notice that in this example
+we don't explicitly include `batch` as a covariate,
+although that is possible.
+Here we let surrogate variable analysis (SVA)
+generate batch covariates.
+```{r}
+sites.ret <- ewaff.sites(methylation ~ variable + continuous + categorical,
+                         variable.of.interest="variable",
+                         methylation=methylation,
+                         data=data,
+                         generate.confounders="sva",
+                         method="glm")
+```
+
+We show the top 10 associations.
+```{r}
+top.idx <- order(sites.ret$table$p.value)[1:10]
+sites.ret$table[top.idx,]
+```
+
+Just for interest, we see if SVA detected batch.
+```{r}
+fit <- lm(sites.ret$design[,"sv1"] ~ data$batch)
+coef(summary(fit))
+```
+It does seem like it did.
+
+### Generating an EWAS report
+
+```{r}
+sum.ret <- ewaff.summary(sites.ret, manifest$chr, manifest$pos, methylation,
+                         selected.cpg.sites="s58")
+
+ewaff.report(sum.ret, output.file="output/report.html",
+             author="Dom Rand",
+             study="Associations in my kind of data")
+```
+
+### Other kinds of EWAS
+
+#### Methylation is not the outcome
+Methylation does not have to be the outcome variable.
+In fact, any valid GLM model is possible.
+In the following example, we make our binary variable the outcome.
+```{r}
+log.ret <- ewaff.sites(variable ~ methylation + continuous + categorical,
+                       variable.of.interest="variable",
+                       methylation=methylation,
+                       data=data,
+                       family="binomial",
+                       generate.confounders="sva",
+                       method="glm")                     
+```
+
+Associations are identical to
+those identified when methylation was the outcome.
+```{r}
+table(sites.ret$table$p.adjust < 0.05, log.ret$table$p.adjust < 0.05)
+```
+
+
+#### Variable of interest is complex
+
+The variable of interest may be categorical with more than two categories.
+```{r}
+cats.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
+                        variable.of.interest="categorical",
+                        methylation=methylation,
+                        data=data,
+                        generate.confounders="sva",
+                        method="limma")
+```
+
+In this case, an f-statistic and p-value is calculated for the variable
+along with statistics each binary 'dummy' variable.
+```{r}
+cats.ret$table[1:2,]
+```
+
+The variable of interest may actuually be multiple variables.
+```{r}
+vars.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
+                        variable.of.interest=c("continuous","variable"),
+                        methylation=methylation,
+                        data=data,
+                        generate.confounders="sva",
+                        method="limma")
+```
+
+Here again, an f-statistic is calcualted along with individual statistics
+for each variable.
+```{r}
+vars.ret$table[1:5,]
+```

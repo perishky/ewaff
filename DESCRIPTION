@@ -1,0 +1,56 @@
+Package: ewaff
+Version: 0.0.1
+Title: Efficient and Flexible EWAS
+Description: Efficient and flexible algorithms for testing associations with DNA methylation
+Authors@R: c(person("Matthew", "Suderman", role = c("cre", "aut"),
+                    email = "matthewsuderman@hotmail.com"),              
+             person("Gemma", "Sharp", role = c("cre", "aut")),
+             person("Paul", "Yousefi", role = c("cre", "aut")),
+	     person("Leanne", "Kupers", role = c("cre", "aut")))
+Author: Matthew Suderman <matthewsuderman@hotmail.com> [cre, aut],
+    Gemma Sharp [cre, aut],
+    Paul Yousefi [cre, aut],
+    Leanne Kupers [cre, aut]
+Maintainer: Matthew Suderman <matthewsuderman@hotmail.com>
+Depends:
+    parallel,
+    ggplot2,
+    sva,
+    SmartSVA,
+    knitr,
+    markdown,
+    limma,
+    MASS,
+    lmtest,
+    sandwich,
+    survival,
+    mice,
+    metafor
+Imports:
+    parallel, 
+    sva, 
+    MASS, 
+    lmtest, 
+    sandwich, 
+    matrixStats,
+    multcomp, 
+    limma, 
+    ggplot2,
+    gridExtra,
+    knitr,
+    Cairo,
+    markdown,
+    quadprog,
+    statmod,
+    sva,
+    SmartSVA,
+    survival,
+    mice
+Suggests:
+    betareg, 
+    survminer
+License: Artistic-2.0
+URL: 
+LazyData: yes
+biocViews: DNAMethylation, Microarray
+RoxygenNote: 6.1.0
