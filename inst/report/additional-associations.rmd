@@ -1,0 +1,14 @@
+## Additional variable associations
+
+```{r,include=FALSE}
+out <- NULL
+if (!is.null(object$additional.associations)) {
+    for (additional.name in names(object$additional.associations))
+        out <- c(out, knit_child(file.path(report.path, "additional.rmd")))
+}
+```
+
+```{r,results="asis"}
+if (!is.null(out))
+    cat(out, sep="\n\n")
+```

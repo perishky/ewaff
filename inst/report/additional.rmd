@@ -1,0 +1,17 @@
+### Additional variable `r additional.name`
+
+```{r}
+output <- object$additional.associations[[additional.name]]$output
+for (name in names(output)) {
+    cat("", name, sep="\n")
+    print(output[[name]])
+}
+```
+
+```{r}
+fig.width <- 1 + opts_chunk$get("fig.width")
+```
+
+```{r,message=F,fig.width=fig.width}
+(object$additional.associations[[additional.name]]$plot)
+```
