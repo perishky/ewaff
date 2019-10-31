@@ -82,9 +82,14 @@ build.design.matrix  <- function(formula,
     if (!is.null(generate.confounders)) {
         ## replace missing values with CpG methylation mean 
         na.idx <- which(is.na(methylation), arr.ind=TRUE)
-        if (nrow(na.idx) > 0)
-            methylation[na.idx] <- rowMeans(methylation, na.rm=TRUE)[na.idx[,1]]
-
+        if (nrow(na.idx) > 0) {
+            mean.values <- rowMeans(methylation[na.idx[,1],,drop=F], na.rm=TRUE)
+            nan.idx <- which(is.nan(mean.values))
+            if (length(nan.idx) > 0) ## if cpg site is entirely missing
+                mean.values[nan.idx] <- 0.5
+            methylation[na.idx] <- mean.values
+        }
+        
         ## retain the most variable CpG sites
         if (!is.null(most.variable)) {
             var.idx <- order(rowVars(methylation, na.rm=T), decreasing=T)[1:most.variable]
