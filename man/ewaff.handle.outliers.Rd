@@ -4,8 +4,12 @@
 \alias{ewaff.handle.outliers}
 \title{Handle outliers}
 \usage{
-ewaff.handle.outliers(methylation, method = c("iqr", "winsorize"),
-  iqr.limit = 3, winsorize.pct = 0.05)
+ewaff.handle.outliers(
+  methylation,
+  method = c("iqr", "winsorize"),
+  iqr.limit = 3,
+  winsorize.pct = 0.05
+)
 }
 \arguments{
 \item{methylation}{DNA methylation matrix, one row per CpG site,

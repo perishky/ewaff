@@ -50,6 +50,7 @@ sites.ret <- ewaff.sites(Surv(eventtime, status) ~ methylation + binvar + convar
                          data=data,
                          generate.confounders="pca",
                          n.confounders=5,
+                         random.subset=0.5,
                          method="coxph")
 
 ##########################

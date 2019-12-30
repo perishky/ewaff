@@ -4,9 +4,20 @@
 \alias{ewaff.sites}
 \title{Test associations at CpG sites}
 \usage{
-ewaff.sites(formula, variable.of.interest, methylation, data,
-  family = gaussian, method = "glm", generate.confounders = NULL,
-  n.confounders = NULL, most.variable = NULL, ..., debug = F)
+ewaff.sites(
+  formula,
+  variable.of.interest,
+  methylation,
+  data,
+  family = gaussian,
+  method = "glm",
+  generate.confounders = NULL,
+  n.confounders = NULL,
+  most.variable = NULL,
+  random.subset = 0.05,
+  ...,
+  debug = F
+)
 }
 \arguments{
 \item{formula}{An object of class \code{\link{formula}}:
@@ -40,6 +51,9 @@ or if principal components the maximum number (Default: NULL).}
 
 \item{most.variable}{Generate confounders from the
 #' given most variable CpG sites rather than the whole matrix (Default: NULL).}
+
+\item{random.subset}{Generate surrogate variables from the
+given percentage of randomly selected CpG sites rather than the whole matrix (Default: 0.05, i.e. 5 percent).}
 
 \item{...}{Arguments to \code{\link{glm}}, \code{\link{rlm}}, \code{\link{limma::eBayes}},
 or \code{\link{survival::coxph}}.}

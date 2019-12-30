@@ -4,8 +4,18 @@
 \alias{ewaff.meta.bumps}
 \title{ewaff.meta.bumps}
 \usage{
-ewaff.meta.bumps(meta.estimate, meta.p.value, estimate, se, methylation,
-  chr, pos, maxgap = 500, p.cutoff = 0.05, verbose = T)
+ewaff.meta.bumps(
+  meta.estimate,
+  meta.p.value,
+  estimate,
+  se,
+  methylation,
+  chr,
+  pos,
+  maxgap = 500,
+  p.cutoff = 0.05,
+  verbose = T
+)
 }
 \arguments{
 \item{meta.estimate}{Vector of meta-analysed effect estimates.}

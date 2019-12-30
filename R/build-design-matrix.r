@@ -7,7 +7,10 @@ build.design.matrix  <- function(formula,
                                  generate.confounders=NULL,
                                  n.confounders=NULL,
                                  most.variable=NULL,
+                                 random.subset=0.05,
                                  ...) {
+    stopifnot(ncol(methylation) == nrow(data))
+    
     stopifnot(is.null(generate.confounders)
               || generate.confounders == "sva"
               || generate.confounders == "smartsva"
@@ -18,6 +21,20 @@ build.design.matrix  <- function(formula,
               || (is.numeric(most.variable)
                   && most.variable > 1 
                   && most.variable <= nrow(methylation)))
+
+    stopifnot(is.null(random.subset)
+              || (is.numeric(random.subset)
+                  && random.subset > 0
+                  && random.subset <= 1))
+
+    if (!is.null(random.subset) && is.null(most.variable)) {
+        subset.size <- ceiling(nrow(methylation)*random.subset)
+        if (subset.size < 3)
+            stop("random.subset captures < 3 features, should be larger")
+    }
+
+    if (!is.null(random.subset) && !is.null(most.variable))
+        warning("most.variable is not NULL so random.subset will be ignored")
     
     stopifnot(method != "coxph" || is.null(generate.confounders) || generate.confounders=="pca")
 
@@ -82,18 +99,16 @@ build.design.matrix  <- function(formula,
     if (!is.null(generate.confounders)) {
         ## replace missing values with CpG methylation mean 
         na.idx <- which(is.na(methylation), arr.ind=TRUE)
-        if (nrow(na.idx) > 0) {
-            mean.values <- rowMeans(methylation[na.idx[,1],,drop=F], na.rm=TRUE)
-            nan.idx <- which(is.nan(mean.values))
-            if (length(nan.idx) > 0) ## if cpg site is entirely missing
-                mean.values[nan.idx] <- 0.5
-            methylation[na.idx] <- mean.values
-        }
-        
+        if (nrow(na.idx) > 0)
+            methylation[na.idx] <- rowMeans(methylation, na.rm=TRUE)[na.idx[,1]]
+
         ## retain the most variable CpG sites
         if (!is.null(most.variable)) {
             var.idx <- order(rowVars(methylation, na.rm=T), decreasing=T)[1:most.variable]
             methylation <- methylation[var.idx,,drop=F]
+        } else if (!is.null(random.subset)) {
+            rand.idx <- sample(1:nrow(methylation), ceiling(nrow(methylation)*random.subset), replace=F)
+            methylation <- methylation[rand.idx,,drop=F]
         }
         
         ## perform surrogate variable analysis and add SVs to the design matrix

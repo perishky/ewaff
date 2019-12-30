@@ -2,7 +2,7 @@
 #'
 #' Annotate bumps.
 #'
-#' @param bumps Output from \link{ewaff.bumps}}.
+#' @param bumps Output from \code{\link{ewaff.bumps}()}.
 #' @param annotation A vector annotating the features
 #' in the input of \link{ewaff.bumps}.
 #' @return A vector providing the annotation for each bump.

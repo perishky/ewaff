@@ -4,8 +4,13 @@
 \alias{ewaff.report}
 \title{Generate CpG associations report}
 \usage{
-ewaff.report(object, output.file = "report.html", author = "Analyst",
-  study = "Illumina methylation data", ...)
+ewaff.report(
+  object,
+  output.file = "report.html",
+  author = "Analyst",
+  study = "Illumina methylation data",
+  ...
+)
 }
 \arguments{
 \item{object}{Output from \code{\link{ewaff.summary}}.}

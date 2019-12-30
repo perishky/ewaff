@@ -4,8 +4,14 @@
 \alias{ewaff.manhattan.plot}
 \title{Manhattan plot}
 \usage{
-ewaff.manhattan.plot(chr, pos, estimates, p.values,
-  sig.threshold = 1e-07, title = "Manhattan plot")
+ewaff.manhattan.plot(
+  chr,
+  pos,
+  estimates,
+  p.values,
+  sig.threshold = 1e-07,
+  title = "Manhattan plot"
+)
 }
 \arguments{
 \item{chr}{Chromosome.}

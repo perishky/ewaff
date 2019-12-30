@@ -4,9 +4,16 @@
 \alias{ewaff.summary}
 \title{Summarize results.}
 \usage{
-ewaff.summary(object, chr, pos, methylation,
-  selected.cpg.sites = character(0), additional.variables = NULL,
-  parameters = ewaff.report.parameters(), verbose = T)
+ewaff.summary(
+  object,
+  chr,
+  pos,
+  methylation,
+  selected.cpg.sites = character(0),
+  additional.variables = NULL,
+  parameters = ewaff.report.parameters(),
+  verbose = T
+)
 }
 \arguments{
 \item{object}{Object returned by \code{\link{ewaff.sites}}.}

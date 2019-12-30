@@ -4,10 +4,15 @@
 \alias{ewaff.qq.plot}
 \title{QQ plot}
 \usage{
-ewaff.qq.plot(p.values, sig.threshold = 1e-07, sig.color = "red",
-  title = "QQ plot", xlab = bquote(-log[10]("expected p-values")),
+ewaff.qq.plot(
+  p.values,
+  sig.threshold = 1e-07,
+  sig.color = "red",
+  title = "QQ plot",
+  xlab = bquote(-log[10]("expected p-values")),
   ylab = bquote(-log[10]("observed p-values")),
-  lambda.method = "median")
+  lambda.method = "median"
+)
 }
 \arguments{
 \item{p.values}{A vector of p-values, one per association test.}

@@ -4,8 +4,15 @@
 \alias{ewaff.bump.candidates}
 \title{ewaff.bump.candidates}
 \usage{
-ewaff.bump.candidates(estimate, p.value, chr, pos, maxgap = 500,
-  p.cutoff = 0.05, verbose = T)
+ewaff.bump.candidates(
+  estimate,
+  p.value,
+  chr,
+  pos,
+  maxgap = 500,
+  p.cutoff = 0.05,
+  verbose = T
+)
 }
 \arguments{
 \item{estimate}{Vector of EWAS effect estimates (corresponds to rows of \code{methylation}).}

@@ -4,9 +4,18 @@
 \alias{ewaff.sva}
 \title{Generate surrogate variables using the ewaff.sites syntax}
 \usage{
-ewaff.sva(formula, variable.of.interest, methylation, data,
-  family = gaussian, n.sv = 10, most.variable = most.variable,
-  algorithm = "sva", ...)
+ewaff.sva(
+  formula,
+  variable.of.interest,
+  methylation,
+  data,
+  family = gaussian,
+  n.sv = 10,
+  most.variable = NULL,
+  random.subset = 0.05,
+  algorithm = "sva",
+  ...
+)
 }
 \arguments{
 \item{formula}{An object of class \code{\link{formula}}:
@@ -19,12 +28,17 @@ for which to save summary statistics.}
 \item{methylation}{DNA methylation matrix, one row per CpG site,
 one column per sample.}
 
+\item{data}{Data frame providing variables referenced in model formula.}
+
 \item{family}{(Default: gaussian).}
 
 \item{n.sv}{Number of surrogate variables to compute (Default: 10).}
 
 \item{most.variable}{Generate surrogate variables from the
 given most variable CpG sites rather than the whole matrix (Default: NULL).}
+
+\item{random.subset}{Generate surrogate variables from the
+given percentage of randomly selected CpG sites rather than the whole matrix (Default: 0.05, i.e. 5 percent).}
 
 \item{algorithm}{Algorithm to use, either "sva" or "smartsva" (Default: "sva").}
 }

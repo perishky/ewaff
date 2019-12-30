@@ -4,8 +4,15 @@
 \alias{ewaff.bump.statistics}
 \title{ewaff.bump.statistics}
 \usage{
-ewaff.bump.statistics(regions, estimate, se, methylation, chr, pos,
-  verbose = T)
+ewaff.bump.statistics(
+  regions,
+  estimate,
+  se,
+  methylation,
+  chr,
+  pos,
+  verbose = T
+)
 }
 \arguments{
 \item{regions}{Data frame of genomic regions providing chromosome (chr), start and end coordinates.}

@@ -4,8 +4,11 @@
 \alias{ewaff.report.parameters}
 \title{Specify parameters for report}
 \usage{
-ewaff.report.parameters(sig.threshold = NA, max.plots = 10,
-  qq.inflation.method = "median")
+ewaff.report.parameters(
+  sig.threshold = NA,
+  max.plots = 10,
+  qq.inflation.method = "median"
+)
 }
 \arguments{
 \item{sig.threshold}{P-value threshold for significance (Default: NA).

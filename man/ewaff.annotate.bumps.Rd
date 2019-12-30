@@ -7,6 +7,8 @@
 ewaff.annotate.bumps(bumps, annotation)
 }
 \arguments{
+\item{bumps}{Output from \code{\link{ewaff.bumps}()}.}
+
 \item{annotation}{A vector annotating the features
 in the input of \link{ewaff.bumps}.}
 }

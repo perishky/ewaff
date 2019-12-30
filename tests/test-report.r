@@ -43,6 +43,7 @@ sites.ret <- ewaff.sites(methylation ~ .,
                    methylation=methylation,
                    data=data,
                    generate.confounders="sva",
+                   random.subset=0.9,
                    method="glm")
 
 ##########################

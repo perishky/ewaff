@@ -1,5 +1,5 @@
 Package: ewaff
-Version: 0.0.1
+Version: 0.0.2
 Title: Efficient and Flexible EWAS
 Description: Efficient and flexible algorithms for testing associations with DNA methylation
 Authors@R: c(person("Matthew", "Suderman", role = c("cre", "aut"),
@@ -50,7 +50,7 @@ Suggests:
     betareg, 
     survminer
 License: Artistic-2.0
-URL: 
+URL: http://github.com/perishky/ewaff
 LazyData: yes
 biocViews: DNAMethylation, Microarray
-RoxygenNote: 6.1.0
+RoxygenNote: 7.0.2

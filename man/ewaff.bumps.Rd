@@ -4,8 +4,17 @@
 \alias{ewaff.bumps}
 \title{ewaff.bumps}
 \usage{
-ewaff.bumps(estimate, se, p.value, methylation, chr, pos, maxgap = 500,
-  p.cutoff = 0.05, verbose = T)
+ewaff.bumps(
+  estimate,
+  se,
+  p.value,
+  methylation,
+  chr,
+  pos,
+  maxgap = 500,
+  p.cutoff = 0.05,
+  verbose = T
+)
 }
 \arguments{
 \item{estimate}{Vector of EWAS effect estimates (corresponds to rows of \code{methylation}).}
