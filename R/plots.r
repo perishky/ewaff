@@ -221,7 +221,7 @@ ewaff.glm.plot <- function(variable.of.interest, data, methylation, title) {
         stats.desc <- paste(stats.desc, "; p[beta] = ", format(p.value.beta, digits=3), sep="")
     }
     y.axis.label <- "DNA methylation"
-    if (!is.null(covariates)) {
+    if (!is.null(covariates) && ncol(covariates) > 0) {
         methylation <- residuals(base)
         y.axis.label <- "adjusted DNA methylation"
     }
