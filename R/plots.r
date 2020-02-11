@@ -168,7 +168,7 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
 #' and the covariates.
 #' 
 #' @export
-ewaff.glm.plot <- function(variable.of.interest, data, methylation, title) {
+ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.threshold=20) {
     stopifnot(is.data.frame(data))
     stopifnot(variable.of.interest %in% colnames(data))
     stopifnot(is.vector(methylation))
@@ -228,7 +228,7 @@ ewaff.glm.plot <- function(variable.of.interest, data, methylation, title) {
 
     ## plot
     data <- data.frame(methylation=methylation, variable=data[[variable.of.interest]])
-    if (is.factor(data$variable) || length(unique(data$variable)) <= 20) {
+    if (is.factor(data$variable) || length(unique(data$variable)) <= bp.threshold) {
         data$variable <- as.factor(data$variable)
         p <- (ggplot(data, aes(x=variable, y=methylation)) +
               geom_boxplot())
