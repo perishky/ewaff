@@ -123,6 +123,7 @@ ewaff.summary <- function(object, chr, pos, methylation,
         msg("Plotting", cpg, verbose=verbose)
         ewaff.cpg.plot(variable.of.interest, as.data.frame(object$design), methylation[cpg,], cpg)
     }, simplify=F)
+    
     sample.characteristics <- NULL
     covariate.associations <- NULL
     additional.associations <- NULL

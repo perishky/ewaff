@@ -4,7 +4,13 @@
 \alias{ewaff.glm.plot}
 \title{Plots GLM regression of a CpG site}
 \usage{
-ewaff.glm.plot(variable.of.interest, data, methylation, title)
+ewaff.glm.plot(
+  variable.of.interest,
+  data,
+  methylation,
+  title,
+  bp.threshold = 20
+)
 }
 \arguments{
 \item{variable.of.interest}{Name in \code{colnames(data)} for the variable of interest.}

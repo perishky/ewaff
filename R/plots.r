@@ -241,6 +241,55 @@ ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.th
      xlab(stats.desc) + ylab(y.axis.label))
 }
 
+#' Plots GLM regression residuals vs fitted values for a CpG site
+#'
+#' @param variable.of.interest Name in \code{colnames(data)} for the variable of interest.
+#' @param data Data frame containing all variables.
+#' @param title Title of the plot.
+#' @param methylation Vector of methylation levels.
+#' @param \code{\link{ggplot}} object showing the scatterplot
+#' of fitted values vs residuals for the model \code{methylation ~ variable + covariates}.
+#'
+#' @examples
+#' methylation <- ... ## methylation matrix
+#' data <- ... ## variable of interest (smoking) and covariates
+#' obj <- ewaff.sites(methylation ~ smoking + ., methylation, data)
+#' cpg <- "cg05575921"
+#' p <- ewaff.glm.residuals.plot("smoking", as.data.frame(object$design), methylation[cpg,], cpg)
+#' print(p)
+#' 
+#' @export
+ewaff.glm.residuals.plot <- function(variable.of.interest, data, methylation, title) {
+    stopifnot(is.data.frame(data))
+    stopifnot(variable.of.interest %in% colnames(data))
+    stopifnot(is.vector(methylation))
+    stopifnot(length(methylation) == nrow(data))
+
+    is.constant <- sapply(data, function(col) length(unique(na.omit(col))) <= 1)
+    data <- data[,which(!is.constant),drop=F]
+    
+    covariates <- data
+    covariates[[variable.of.interest]] <- NULL
+       
+    ## remove missing values
+    idx <- which(!is.na(methylation) & !is.na(data[[variable.of.interest]]))
+    if (length(idx) < 3) {
+        warning("Not enough data points to plot CpG methylation.")
+        return(NULL)
+    }
+    methylation <- methylation[idx]
+    data <- data[idx,,drop=F] 
+    covariates <- covariates[idx,,drop=F]
+   
+    fit <- lm(methylation ~ ., data=data)
+    
+    data <- data.frame(fitted=fitted(fit), residuals=residuals(fit))
+    (ggplot(data, aes(x=fitted, y=residuals)) +
+     geom_point() + geom_smooth(method="loess") +
+     ggtitle(title) +
+     xlab("Fitted values") + ylab("Residuals"))    
+}
+
 
 ewaff.coxph.plot <- function(survival.expression, data, methylation, title) {
     require(survminer)
