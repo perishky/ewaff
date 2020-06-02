@@ -157,7 +157,7 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
          theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
          ggtitle(title)
 
-     if (betas_present) {
+     if (all(!is.na(estimates))) {
       (p + geom_hline(yintercept=log(sig.threshold,10), colour="red"))
      } else {
       (p)
