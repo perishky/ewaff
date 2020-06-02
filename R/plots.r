@@ -127,7 +127,12 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
                         chr.colour=0)
     stats$chr.colour[stats$chromosome %in% chromosomes[seq(1,length(chromosomes),2)]] <- 1
     p.values[which(p.values < .Machine$double.xmin)] <- .Machine$double.xmin
-    stats$stat <- -log(p.values,10) * sign(estimates)
+
+    if (all(!is.na(estimates))) {
+      stats$stat <- -log(p.values,10) * sign(estimates) 
+    } else {
+      stats$stat <- -log(p.values,10)
+    }
     
     stats <- stats[order(stats$stat, decreasing=T),]
     
