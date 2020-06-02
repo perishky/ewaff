@@ -146,17 +146,22 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
     selection.idx <- scatter.thinning(stats$global, stats$stat,
                                       resolution=100, max.per.cell=100)
     
-    (ggplot(stats[selection.idx,], aes(x=position, y=stat)) +
-     geom_point(aes(colour=chr.colour)) +
-     facet_grid(. ~ chromosome, space="free_x", scales="free_x") +
-     theme(strip.text.x = element_text(angle = 90)) +
-     guides(colour=FALSE) +
-     labs(x="Position",
-          y=bquote(-log[10]("p-value") * sign(beta))) +             
-     geom_hline(yintercept=log(sig.threshold,10), colour="red") +
-     geom_hline(yintercept=-log(sig.threshold,10), colour="red") +
-     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
-     ggtitle(title))
+    p <- ggplot(stats[selection.idx,], aes(x=position, y=stat)) +
+         geom_point(aes(colour=chr.colour)) +
+         facet_grid(. ~ chromosome, space="free_x", scales="free_x") +
+         theme(strip.text.x = element_text(angle = 90)) +
+         guides(colour=FALSE) +
+         labs(x="Position",
+              y=bquote(-log[10]("p-value") * sign(beta))) +             
+         geom_hline(yintercept=-log(sig.threshold,10), colour="red") +
+         theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+         ggtitle(title)
+
+     if (betas_present) {
+      (p + geom_hline(yintercept=log(sig.threshold,10), colour="red"))
+     } else {
+      (p)
+     }
 }
 
 
