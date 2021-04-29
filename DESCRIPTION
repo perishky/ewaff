@@ -53,4 +53,4 @@ License: Artistic-2.0
 URL: http://github.com/perishky/ewaff
 LazyData: yes
 biocViews: DNAMethylation, Microarray
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.1

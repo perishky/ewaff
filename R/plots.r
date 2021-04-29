@@ -30,7 +30,7 @@ scatter.thinning <- function(x,y,resolution=100,max.per.cell=100) {
 #' @param xlab Label for the x-axis (Default: -log_10(expected p-values)).
 #' @param ylab Label for the y-axis (Default: -log_10(observed p-values)).
 #' @param lambda.method Method for calculating genomic inflation lambda.
-#' Valid values are "median", "regression", or "robust" (Default: "median").
+#' Valid values are "median", "regression", "robust", or "none" (Default: "median"). A value of "none" will prevent the lambda value being displayed on the plot.
 #' @return An \code{\link{ggplot}} object.
 #' @export
 ewaff.qq.plot <- function(p.values,
@@ -45,16 +45,7 @@ ewaff.qq.plot <- function(p.values,
     p.values[which(p.values < .Machine$double.xmin)] <- .Machine$double.xmin
     stats <- data.frame(is.sig=p.values < sig.threshold,
                         expected=-log(sort(ppoints(p.values),decreasing=T),10),
-                        observed=-log(p.values, 10))
-    lambda <- qq.lambda(p.values[which(p.values > sig.threshold)],
-                        method=lambda.method)
-    
-    label.x <- min(stats$expected) + diff(range(stats$expected))*0.1
-    label.y <- min(stats$expected) + diff(range(stats$observed))*0.9
-    
-    lambda.label <- paste("lambda == ", format(lambda$estimate,digits=3),
-                          "%+-%", format(lambda$se, digits=3),
-                          "~(", lambda.method, ")", sep="")
+                        observed=-log(p.values, 10))    
     
     selection.idx <- scatter.thinning(stats$observed, stats$expected,
                                       resolution=100, max.per.cell=100)
@@ -62,21 +53,36 @@ ewaff.qq.plot <- function(p.values,
     lim <- range(c(0, stats$expected, stats$observed))
     sig.threshold <- format(sig.threshold, digits=3)
     
-    (ggplot(stats[selection.idx,], aes(x=expected, y=observed)) + 
-     geom_abline(intercept = 0, slope = 1, colour="black") +              
-     geom_point(aes(colour=factor(sign(is.sig)))) +
-     scale_colour_manual(values=c("black", "red"),
-                         name="Significant",
-                         breaks=c("0","1"),
-                         labels=c(paste("p-value >", sig.threshold),
-                             paste("p-value <", sig.threshold))) +
-     annotate(geom="text", x=label.x, y=label.y, hjust=0,
-              label=lambda.label,
-              parse=T) +
-     xlim(lim) + ylim(lim) + 
-     xlab(xlab) + ylab(ylab) +
-     coord_fixed() +
-     ggtitle(title))
+    p <- ggplot(stats[selection.idx,], aes(x=expected, y=observed)) + 
+         geom_abline(intercept = 0, slope = 1, colour="black") +              
+         geom_point(aes(colour=factor(sign(is.sig)))) +
+         scale_colour_manual(values=c("black", "red"),
+                             name="Significant",
+                             breaks=c("0","1"),
+                             labels=c(paste("p-value >", sig.threshold),
+                                 paste("p-value <", sig.threshold))) +
+         xlim(lim) + ylim(lim) + 
+         xlab(xlab) + ylab(ylab) +
+         coord_fixed() +
+         ggtitle(title)
+    
+    if (lambda.method == "none") {
+      (p)
+    } else {
+      lambda <- qq.lambda(p.values[which(p.values > sig.threshold)],
+                          method=lambda.method)
+      
+      label.x <- min(stats$expected) + diff(range(stats$expected))*0.1
+      label.y <- min(stats$expected) + diff(range(stats$observed))*0.9
+      
+      lambda.label <- paste("lambda == ", format(lambda$estimate,digits=3),
+                            "%+-%", format(lambda$se, digits=3),
+                            "~(", lambda.method, ")", sep="")
+      (p + 
+        annotate(geom="text", x=label.x, y=label.y, hjust=0,
+                 label=lambda.label,
+                 parse=T))
+    }
 }
 
 qq.lambda <- function(p.values, method="median", B=100) {
