@@ -28,7 +28,7 @@ ewaff.qq.plot(
 \item{ylab}{Label for the y-axis (Default: -log_10(observed p-values)).}
 
 \item{lambda.method}{Method for calculating genomic inflation lambda.
-Valid values are "median", "regression", or "robust" (Default: "median").}
+Valid values are "median", "regression", "robust", or "none" (Default: "median"). A value of "none" will prevent the lambda value being displayed on the plot.}
 }
 \value{
 An \code{\link{ggplot}} object.
