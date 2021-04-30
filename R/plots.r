@@ -51,7 +51,7 @@ ewaff.qq.plot <- function(p.values,
                                       resolution=100, max.per.cell=100)
     
     lim <- range(c(0, stats$expected, stats$observed))
-    sig.threshold <- format(sig.threshold, digits=3)
+    st <- format(sig.threshold, digits=3)
     
     p <- ggplot(stats[selection.idx,], aes(x=expected, y=observed)) + 
          geom_abline(intercept = 0, slope = 1, colour="black") +              
@@ -59,8 +59,8 @@ ewaff.qq.plot <- function(p.values,
          scale_colour_manual(values=c("black", "red"),
                              name="Significant",
                              breaks=c("0","1"),
-                             labels=c(paste("p-value >", sig.threshold),
-                                 paste("p-value <", sig.threshold))) +
+                             labels=c(paste("p-value >", st),
+                                 paste("p-value <", st))) +
          xlim(lim) + ylim(lim) + 
          xlab(xlab) + ylab(ylab) +
          coord_fixed() +
