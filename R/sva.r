@@ -42,7 +42,7 @@ ewaff.sva <- function(formula,
                                   generate.confounders=algorithm,
                                   n.confounders=n.sv,
                                   most.variable=most.variable,
-                                  random.subset=5,
+                                  random.subset=random.subset,
                                   ...)$matrix
     design[,grep("^sv[0-9]+", colnames(design)),drop=F]
 }
