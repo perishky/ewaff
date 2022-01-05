@@ -250,7 +250,7 @@ ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.th
               geom_boxplot())
     } else {
         p <- (ggplot(data, aes(x=variable, y=methylation)) +
-              geom_point() + geom_smooth(method=lm))
+              geom_point() + geom_smooth(method=lm,formula=y~x))
     }
 
     (p + ggtitle(title) +
@@ -301,7 +301,7 @@ ewaff.glm.residuals.plot <- function(variable.of.interest, data, methylation, ti
     
     data <- data.frame(fitted=fitted(fit), residuals=residuals(fit))
     (ggplot(data, aes(x=fitted, y=residuals)) +
-     geom_point() + geom_smooth(method="loess") +
+     geom_point() + geom_smooth(method="loess",formula=y~x) +
      ggtitle(title) +
      xlab("Fitted values") + ylab("Residuals"))    
 }
