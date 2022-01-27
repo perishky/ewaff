@@ -109,6 +109,8 @@ sites.ret <- ewaff.sites(methylation ~ variable + continuous + categorical,
                          methylation=methylation,
                          data=data,
                          generate.confounders="sva",
+                         random.subset=1,
+                         n.confounders=1,
                          method="glm")
 ```
 
@@ -149,6 +151,8 @@ log.ret <- ewaff.sites(variable ~ methylation + continuous + categorical,
                        data=data,
                        family="binomial",
                        generate.confounders="sva",
+                       random.subset=1,
+                       n.confounders=1,
                        method="glm")                     
 ```
 
@@ -168,6 +172,8 @@ cats.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
                         methylation=methylation,
                         data=data,
                         generate.confounders="sva",
+                        random.subset=1,
+                        n.confounders=1,
                         method="limma")
 ```
 
@@ -184,6 +190,8 @@ vars.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
                         methylation=methylation,
                         data=data,
                         generate.confounders="sva",
+                        random.subset=1,
+                        n.confounders=1,
                         method="limma")
 ```
 

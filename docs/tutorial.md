@@ -91,16 +91,16 @@ outliers
 
 ```
 ##       [,1] [,2]
-##  [1,]   83  221
-##  [2,]   59  123
-##  [3,]   15  405
-##  [4,]   76  165
-##  [5,]   63  398
-##  [6,]   47   86
-##  [7,]   14  420
-##  [8,]   16  487
-##  [9,]   50  281
-## [10,]   14  390
+##  [1,]   74  173
+##  [2,]   98  452
+##  [3,]   53  425
+##  [4,]    8  409
+##  [5,]   62   96
+##  [6,]   82  149
+##  [7,]   81  121
+##  [8,]   38  151
+##  [9,]   48  148
+## [10,]   95  135
 ```
 
 ```r
@@ -110,14 +110,14 @@ which(is.na(methylation), arr.ind=T)
 
 ```
 ##     row col
-## s47  47  86
-## s76  76 165
-## s50  50 281
-## s14  14 390
-## s63  63 398
-## s15  15 405
-## s14  14 420
-## s16  16 487
+## s81  81 121
+## s95  95 135
+## s48  48 148
+## s82  82 149
+## s38  38 151
+## s74  74 173
+## s8    8 409
+## s98  98 452
 ```
 Some 'outliers' were missed because they are not actually outliers.
 
@@ -135,6 +135,8 @@ sites.ret <- ewaff.sites(methylation ~ variable + continuous + categorical,
                          methylation=methylation,
                          data=data,
                          generate.confounders="sva",
+                         random.subset=1,
+                         n.confounders=1,
                          method="glm")
 ```
 
@@ -151,17 +153,17 @@ sites.ret$table[top.idx,]
 ```
 
 ```
-##        estimate           se          t       p.value   n      p.adjust
-## s58 -0.31296886 0.0023881027 -131.05335  0.000000e+00 500  0.000000e+00
-## s61  0.07901268 0.0013680848   57.75422 1.425255e-221 500 1.425255e-219
-## s71 -0.26904696 0.0053172012  -50.59936 2.424591e-197 500 2.424591e-195
-## s11  0.10080193 0.0022914169   43.99109 8.275566e-173 500 8.275566e-171
-## s50  0.02731829 0.0006386444   42.77543 6.928180e-168 499 6.928180e-166
-## s57 -0.04791004 0.0011253586  -42.57313 2.977016e-167 500 2.977016e-165
-## s78 -0.19526830 0.0048316784  -40.41418 1.378311e-158 500 1.378311e-156
-## s49  0.05169961 0.0013563136   38.11774 4.300964e-149 500 4.300964e-147
-## s39  0.14158981 0.0038775013   36.51573 2.671361e-142 500 2.671361e-140
-## s72  0.29505754 0.0081238012   36.32013 1.843770e-141 500 1.843770e-139
+##         estimate           se          t       p.value   n      p.adjust
+## s7  -0.002167527 1.804655e-05 -120.10757  0.000000e+00 500  0.000000e+00
+## s50  0.081268506 8.003392e-04  101.54258  0.000000e+00 500  0.000000e+00
+## s75 -0.093580406 7.122508e-04 -131.38687  0.000000e+00 500  0.000000e+00
+## s33  0.159574185 2.350343e-03   67.89399 2.474930e-252 500 2.474930e-250
+## s1   0.314147596 4.889542e-03   64.24888 1.025477e-241 500 1.025477e-239
+## s98  0.007285512 1.194706e-04   60.98165 1.634132e-231 499 1.634132e-229
+## s25  0.162049835 3.051587e-03   53.10346 4.395821e-206 500 4.395821e-204
+## s69 -0.177208720 3.392930e-03  -52.22882 4.605431e-203 500 4.605431e-201
+## s17  0.151232349 3.349666e-03   45.14848 2.891114e-177 500 2.891114e-175
+## s59  0.085073236 2.045896e-03   41.58239 2.626082e-163 500 2.626082e-161
 ```
 
 Just for interest, we see if SVA detected batch.
@@ -173,9 +175,9 @@ coef(summary(fit))
 
 ```
 ##                Estimate  Std. Error   t value     Pr(>|t|)
-## (Intercept) -0.01568699 0.003258078 -4.814797 1.958675e-06
-## data$batch1  0.03171436 0.004600994  6.892937 1.663669e-11
-## data$batch2  0.01519735 0.004755811  3.195533 1.484469e-03
+## (Intercept) -0.01082079 0.003532752 -3.062990 2.310223e-03
+## data$batch1  0.01979530 0.004865142  4.068802 5.495376e-05
+## data$batch2  0.01156477 0.004892125  2.363956 1.846466e-02
 ```
 It does seem like it did.
 
@@ -188,40 +190,34 @@ sum.ret <- ewaff.summary(sites.ret, manifest$chr, manifest$pos, methylation,
 ```
 
 ```
-## [ewaff.summary] Tue Mar 27 16:17:10 2018 QQ plots 
-## [ewaff.summary] Tue Mar 27 16:17:10 2018 Manhattan plots 
-## [ewaff.summary] Tue Mar 27 16:17:11 2018 CpG site plots: 10 
-## [FUN] Tue Mar 27 16:17:11 2018 Plotting s11
-```
-
-```
-## Loading required package: betareg
-```
-
-```
-## [FUN] Tue Mar 27 16:17:12 2018 Plotting s39 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s49 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s50 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s57 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s58 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s61 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s71 
-## [FUN] Tue Mar 27 16:17:13 2018 Plotting s72 
-## [FUN] Tue Mar 27 16:17:14 2018 Plotting s78 
-## [ewaff.summary] Tue Mar 27 16:17:14 2018 Sample characteristics 
-## [ewaff.sample.characteristics] Tue Mar 27 16:17:14 2018 summarizing variables 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 variableB 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 continuous 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 categorical1 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 categorical2 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 categorical3 
-## [summarize.variable] Tue Mar 27 16:17:14 2018 sv1 
-## [ewaff.covariate.associations] Tue Mar 27 16:17:14 2018 covariate associations 
-## [FUN] Tue Mar 27 16:17:14 2018 continuous 
-## [FUN] Tue Mar 27 16:17:14 2018 categorical1 
-## [FUN] Tue Mar 27 16:17:14 2018 categorical2 
-## [FUN] Tue Mar 27 16:17:14 2018 categorical3 
-## [FUN] Tue Mar 27 16:17:14 2018 sv1
+## [ewaff.summary] Thu Jan 27 01:24:53 2022 QQ plots 
+## [ewaff.summary] Thu Jan 27 01:24:53 2022 Manhattan plots 
+## [ewaff.summary] Thu Jan 27 01:24:53 2022 CpG site plots: 11 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s1 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s7 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s17 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s25 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s33 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s50 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s59 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s69 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s75 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s98 
+## [FUN] Thu Jan 27 01:24:53 2022 Plotting s58 
+## [ewaff.summary] Thu Jan 27 01:24:53 2022 Sample characteristics 
+## [ewaff.sample.characteristics] Thu Jan 27 01:24:53 2022 summarizing variables 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 variableB 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 continuous 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical1 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical2 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical3 
+## [summarize.variable] Thu Jan 27 01:24:53 2022 sv1 
+## [ewaff.covariate.associations] Thu Jan 27 01:24:53 2022 covariate associations 
+## [FUN] Thu Jan 27 01:24:53 2022 continuous 
+## [FUN] Thu Jan 27 01:24:53 2022 categorical1 
+## [FUN] Thu Jan 27 01:24:53 2022 categorical2 
+## [FUN] Thu Jan 27 01:24:53 2022 categorical3 
+## [FUN] Thu Jan 27 01:24:53 2022 sv1
 ```
 
 ```r
@@ -231,11 +227,7 @@ ewaff.report(sum.ret, output.file="output/report.html",
 ```
 
 ```
-## [ewaff.report] Tue Mar 27 16:17:14 2018 Writing report as html file to output/report.html
-```
-
-```
-## Loading required package: gridExtra
+## [ewaff.report] Thu Jan 27 01:24:53 2022 Writing report as html file to output/report.html
 ```
 
 ### Other kinds of EWAS
@@ -252,6 +244,8 @@ log.ret <- ewaff.sites(variable ~ methylation + continuous + categorical,
                        data=data,
                        family="binomial",
                        generate.confounders="sva",
+                       random.subset=1,
+                       n.confounders=1,
                        method="glm")                     
 ```
 
@@ -270,8 +264,8 @@ table(sites.ret$table$p.adjust < 0.05, log.ret$table$p.adjust < 0.05)
 ```
 ##        
 ##         FALSE TRUE
-##   FALSE    21    0
-##   TRUE      3   76
+##   FALSE    17    0
+##   TRUE      8   75
 ```
 
 
@@ -285,6 +279,8 @@ cats.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
                         methylation=methylation,
                         data=data,
                         generate.confounders="sva",
+                        random.subset=1,
+                        n.confounders=1,
                         method="limma")
 ```
 
@@ -301,18 +297,18 @@ cats.ret$table[1:2,]
 ```
 
 ```
-##           f   p.value categorical1.estimate categorical1.se categorical1.t
-## s1 1.688244 0.1686009         -0.0008108143      0.01315824    -0.06162026
-## s2 1.582263 0.1927593         -0.0099781474      0.01116591    -0.89362607
-##    categorical1.p.value categorical2.estimate categorical2.se
-## s1            0.9508902           0.009613312      0.01381623
-## s2            0.3719571           0.004912092      0.01172427
-##    categorical2.t categorical2.p.value categorical3.estimate
-## s1      0.6957987            0.4868821            0.02637100
-## s2      0.4189680            0.6754217           -0.01875292
-##    categorical3.se categorical3.t categorical3.p.value   n p.adjust
-## s1      0.01379154       1.912115           0.05643962 500        1
-## s2      0.01170331      -1.602360           0.10971522 500        1
+##            f   p.value categorical1.estimate categorical1.se categorical1.t
+## s1 0.1563443 0.9255858          -0.001642581     0.007209047      -0.227850
+## s2 1.5711490 0.1954726           0.001777555     0.001739497       1.021879
+##    categorical1.p.value categorical2.estimate categorical2.se categorical2.t
+## s1            0.8198571           0.002263977     0.007007019      0.3231013
+## s2            0.3073384          -0.001775241     0.001690749     -1.0499733
+##    categorical2.p.value categorical3.estimate categorical3.se categorical3.t
+## s1            0.7467552          0.0023652227     0.007058216     0.33510207
+## s2            0.2942437          0.0001363788     0.001703102     0.08007671
+##    categorical3.p.value   n p.adjust
+## s1            0.7376903 500        1
+## s2            0.9362087 500        1
 ```
 
 The variable of interest may actuually be multiple variables.
@@ -323,6 +319,8 @@ vars.ret <- ewaff.sites(methylation ~ categorical + variable + continuous,
                         methylation=methylation,
                         data=data,
                         generate.confounders="sva",
+                        random.subset=1,
+                        n.confounders=1,
                         method="limma")
 ```
 
@@ -339,22 +337,22 @@ vars.ret$table[1:5,]
 ```
 
 ```
-##             f      p.value continuous.estimate continuous.se continuous.t
-## s1  0.5152476 5.976733e-01        -0.003676184   0.004756168   -0.7729298
-## s2 40.7276598 4.243540e-17        -0.004569485   0.004026465   -1.1348628
-## s3 22.3026060 5.330194e-10         0.002470783   0.001706407    1.4479450
-## s4 31.7877296 1.031762e-13        -0.005395120   0.005480739   -0.9843783
-## s5 27.2812407 5.777345e-12         0.001329901   0.001180262    1.1267844
+##             f       p.value continuous.estimate continuous.se continuous.t
+## s1 2069.57711 7.670475e-241       -0.0009363271  0.0024327999   -0.3848763
+## s2    5.99221  2.683384e-03        0.0003991080  0.0005883500    0.6783514
+## s3   71.33490  6.079467e-28       -0.0008383210  0.0051567687   -0.1625671
+## s4  118.62958  8.418467e-43        0.0001080568  0.0009157912    0.1179928
+## s5  114.03147  1.917764e-41       -0.0007817620  0.0015434795   -0.5064933
 ##    continuous.p.value variableB.estimate variableB.se variableB.t
-## s1          0.4399336        0.006244405  0.009694717   0.6441039
-## s2          0.2569832       -0.073640700  0.008207329  -8.9725538
-## s3          0.1482668       -0.022583659  0.003478248  -6.4928256
-## s4          0.3254114       -0.088577937  0.011171643  -7.9288194
-## s5          0.2603807        0.017608508  0.002405782   7.3192443
-##    variableB.p.value   n     p.adjust
-## s1      5.198070e-01 500 1.000000e+00
-## s2      6.040519e-18 500 4.243540e-15
-## s3      2.055153e-10 500 5.330194e-08
-## s4      1.486003e-14 500 1.031762e-11
-## s5      1.017656e-12 500 5.777345e-10
+## s1          0.7004947        0.314148004  0.004885031   64.308296
+## s2          0.4978666       -0.003990602  0.001181399   -3.377861
+## s3          0.8709258        0.123596290  0.010354725   11.936221
+## s4          0.9061213       -0.028311180  0.001838897  -15.395741
+## s5          0.6127364       -0.046802303  0.003099287  -15.100991
+##    variableB.p.value   n      p.adjust
+## s1     3.526973e-242 500 7.670475e-239
+## s2      7.882165e-04 500  2.683384e-01
+## s3      4.941532e-29 500  6.079467e-26
+## s4      5.710129e-44 500  8.418467e-41
+## s5      1.228769e-42 500  1.917764e-39
 ```
