@@ -126,7 +126,7 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
     stopifnot(length(p.values) == length(chr))
     stopifnot(length(p.values) == length(pos))
 
-    chromosomes <- sort(unique(as.character(chr)))
+    chromosomes <- sort(unique(chr))
 
     stats <- data.frame(chromosome=factor(as.character(chr), levels=chromosomes),
                         position=pos,
