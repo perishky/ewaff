@@ -128,7 +128,7 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
 
     chromosomes <- sort(unique(chr))
 
-    stats <- data.frame(chromosome=factor(as.character(chr), levels=chromosomes),
+    stats <- data.frame(chromosome=chr,
                         position=pos,
                         chr.colour=0)
     stats$chr.colour[stats$chromosome %in% chromosomes[seq(1,length(chromosomes),2)]] <- 1
