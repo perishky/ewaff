@@ -19,7 +19,7 @@ data <- data.frame(variable=c(rep("A",n/2), rep("B",n/2)), ## variable of intere
 r <- runif(s, min=-1, max=1) 
 
 ## methylation matrix (rows=cpg sites, cols=samples)
-methylation <- t(sapply(r, function(r) rcor(as.numeric(data$variable), r))) 
+methylation <- t(sapply(r, function(r) rcor(as.numeric(as.factor(data$variable)), r))) 
 
 ## batch variable, 3 batches
 batch <- sample(0:2,size=nrow(data),replace=T)
@@ -284,3 +284,27 @@ cbind(ret5$table$f, ret6$table$f)
 ## [10,]    1.6451558    1.6478805
 
 
+ret.int1 <- ewaff.sites(
+    methylation ~ variable1 * continuous + categorical ,
+    variable.of.interest="variable1:continuous",
+    methylation=methylation,
+    data=data,
+    generate.confounders=NULL,
+    random.subset=0.9,
+    method="glm")
+
+ret.int2 <- ewaff.sites(
+    methylation ~ variable1 * continuous + categorical ,
+    variable.of.interest="variable1*continuous",
+    methylation=methylation,
+    data=data,
+    generate.confounders=NULL,
+    random.subset=0.9,
+    method="glm")
+
+all(abs(ret.int1$table$t - ret.int2$table$t) < 2e-16)
+## [1] TRUE
+
+fit <- lm(methylation[4,] ~ variable1 * continuous + categorical, data=data)
+abs(coef(summary(fit))["variable1B:continuous","t value"] - ret.int1$table$t[4]) < 2e-16
+## [1] TRUE

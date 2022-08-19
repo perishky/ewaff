@@ -58,14 +58,8 @@ build.design.matrix  <- function(formula,
             independent.variable <- "methylation"
         } else {
             dependent.variable <- "methylation"
-            variable.of.interest <- unlist(lapply(variable.of.interest, function(varname) {               
-                if (!is.numeric(data[[varname]])) {
-                    if (!is.factor(data[[varname]]))
-                        data[[varname]] <- as.factor(data[[varname]])
-                    varname <- paste(varname, levels(data[[varname]]), sep="")
-                }
-                intersect(varname, colnames(fit$x))
-            }))
+            variable.of.interest <- lapply(variable.of.interest, guess.fitname, data=data, fitnames=colnames(fit$x))
+            variable.of.interest <- unlist(variable.of.interest)
             independent.variable <- variable.of.interest
         }
 
@@ -163,4 +157,38 @@ build.design.matrix  <- function(formula,
          sample.idx=sample.idx)
 }
 
+## when a variable is a categorical variable,
+## dummy variables generated fit functions like lm, glm, etc.
+## the dummy variable is named with the original variable name
+## with a value of the variable tacked onto the end of it,
+## e.g. a variable "xy" with values "A"/"B"
+## might have a dummy variable "xyA".
+## this function will determine which
+## dummy variable(s) correspond to a given variable.
+## the variable name may be an interaction, e.g. "xy:ab",
+## in which case, the corresponding dummy variable may be
+## be interaction that includes a dummy variable, e.g. "xyA:ab"
+## 
+guess.fitname <- function(varname, data, fitnames) {
+    if (varname %in% colnames(data)) {
+        if (!is.numeric(data[[varname]])) {
+            if (!is.factor(data[[varname]]))
+                data[[varname]] <- as.factor(data[[varname]])
+            varname <- paste(varname, levels(data[[varname]]), sep="")
+        }
+    } else { ## assume interaction
+        if (grepl("*",varname,fixed=T))
+            varname <- gsub("*", ":", varname, fixed=T)
+        if (!grepl(":",varname,fixed=T))
+            stop("variable '", varname, "' was not found")
+        varname <- lapply(
+            unlist(strsplit(varname,":")),
+            guess.fitname,
+            data=data,
+            fitnames=fitnames)
+        varname <- do.call(expand.grid,varname)
+        varname <- apply(varname,1,paste,collapse=":")
+    }
+    intersect(varname, fitnames)
+}
 
