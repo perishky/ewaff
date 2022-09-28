@@ -7,6 +7,37 @@ rcor <- function(x,r) {
     (r*s + e)*sx + mx
 }
 
+## clusterMaker
+## 
+## Code in this file from:
+## 
+## Jaffe AE, Murakami P, Lee H, Leek JT, Fallin DM, Feinberg AP, Irizarry
+## RA (2012). Bump hunting to identify differentially methylated regions
+## in epigenetic epidemiology studies. International journal of
+## epidemiology, 41(1), 200?209. doi: 10.1093/ije/dyr238.
+##
+## https://github.com/rafalab/bumphunter
+bh.clusterMaker <- function(chr, pos, assumeSorted = FALSE, maxGap=300){
+    nonaIndex <- which(!is.na(chr) & !is.na(pos))
+    Indexes <- split(nonaIndex, chr[nonaIndex])
+    clusterIDs <- rep(NA, length(chr))
+    LAST <- 0
+    for(i in seq(along = Indexes)){
+        Index <- Indexes[[i]]
+        x <- pos[Index]
+        if(!assumeSorted){
+            Index <- Index[order(x)]
+            x <- pos[Index]
+        }
+        y <- as.numeric(diff(x) > maxGap)
+        z <- cumsum(c(1, y))
+        clusterIDs[Index] <- z + LAST
+        LAST <- max(z) + LAST
+    }
+    clusterIDs
+}
+
+
 ## create a variable that is correlated with a CpG site s
 ## and only correlated with surrounding CpG sites to the
 ## extent that they are correlated with site s.
@@ -15,7 +46,7 @@ generate.fake.bump.var <- function(mat, chr, pos, cluster.sites=40, bump.sites=2
     stopifnot(cluster.position >= 0 && cluster.position <= 1)
     stopifnot(r >= 0 && r <= 1)
     ## identify clusters
-    clusters <- ewaff:::bh.clusterMaker(chr, pos, maxGap=maxgap)
+    clusters <- bh.clusterMaker(chr, pos, maxGap=maxgap)
     cluster.size <- table(clusters)
     
     stopifnot(length(which(cluster.size >= cluster.sites)) > 0)
@@ -59,7 +90,7 @@ generate.true.bump.var <- function(mat, chr, pos, cluster.sites=40, bump.sites=2
     stopifnot(cluster.position >= 0 && cluster.position <= 1)
     stopifnot(r >= 0 && r <= 1)
     ## identify clusters
-    clusters <- ewaff:::bh.clusterMaker(chr, pos, maxGap=maxgap)
+    clusters <- bh.clusterMaker(chr, pos, maxGap=maxgap)
     cluster.size <- table(clusters)
     cluster.size <- cluster.size[which(cluster.size >= cluster.sites)]
 

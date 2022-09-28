@@ -46,11 +46,8 @@ ewaff.sites <- function(formula,
                         n.confounders=NULL,
                         most.variable=NULL,
                         random.subset=0.05,
-                        ...,
-                        debug=F) {
+                        ...) {
 
-    if (debug) browser()
-    
     stopifnot(method %in% c("glm","rlm","limma","coxph"))
     stopifnot(is.null(generate.confounders)
               || generate.confounders == "sva"

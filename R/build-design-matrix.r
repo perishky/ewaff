@@ -10,6 +10,15 @@ build.design.matrix  <- function(formula,
                                  random.subset=0.05,
                                  ...) {
     stopifnot(ncol(methylation) == nrow(data))
+
+    variable.of.interest.error <- "variable.of.interest should be a character string referencing names of variables in 'data'"
+    
+    if (!is.character(variable.of.interest))
+        stop(variable.of.interest.error)
+
+    all.vars <- unlist(strsplit(variable.of.interest,"[*:]+"))
+    if (method != "coxph" && !all(all.vars %in% colnames(data)))
+        stop(variable.of.interest.error)
     
     stopifnot(is.null(generate.confounders)
               || generate.confounders == "sva"
