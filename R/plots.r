@@ -56,7 +56,7 @@ ewaff.qq.plot <- function(p.values,
     p <- ggplot(stats[selection.idx,], aes(x=expected, y=observed)) + 
          geom_abline(intercept = 0, slope = 1, colour="black") +              
          geom_point(aes(colour=factor(sign(is.sig)))) +
-         scale_colour_manual(values=c("black", "red"),
+         scale_colour_manual(values=c("black", sig.color),
                              name="Significant",
                              breaks=c("0","1"),
                              labels=c(paste("p-value >", st),
