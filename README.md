@@ -2,9 +2,18 @@
 
 Efficient and flexible algorithms for EWAS
 
-See [tutorial](http://htmlpreview.github.io/?https://github.com/perishky/ewaff/blob/master/docs/tutorial.html).
+## Installation 
 
-## Features to be added
+```
+library(remotes)
+install_github("perishky/ewaff")
+```
+
+## Example analysis
+
+[tutorial](http://htmlpreview.github.io/?https://github.com/perishky/ewaff/blob/master/docs/tutorial.html).
+
+## Features to add
 
 - multi-core optional for windows or other debilitated users
 - use tableone for output (per model) in EWAS object and report
