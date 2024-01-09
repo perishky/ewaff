@@ -18,18 +18,32 @@ ewaff.meta.sites <- function(estimate, se, ..., verbose=T) {
     
     ret <- do.call(rbind, mclapply(1:nrow(estimate), function(i) {
         msg(i, verbose=(i %% 10000 == 1 && verbose))
-        fit <- rma.uni(yi=estimate[i,], sei=se[i,], ...)
-        c(estimate=fit$b["intrcpt",1],
-          se=fit$se,
-          z=fit$zval,
-          p.value=fit$pval,
-          ci.ub=fit$ci.ub,
-          ci.lb=fit$ci.lb,
-          Q=fit$QE,
-          Q.p=fit$QEp,
-          I2=fit$I2,
-          H2=fit$H2,
-          tau2=fit$tau2)
+        tryCatch({
+            fit <- rma.uni(yi=estimate[i,], sei=se[i,], ...)
+            c(estimate=fit$b["intrcpt",1],
+              se=fit$se,
+              z=fit$zval,
+              p.value=fit$pval,
+              ci.ub=fit$ci.ub,
+              ci.lb=fit$ci.lb,
+              Q=fit$QE,
+              Q.p=fit$QEp,
+              I2=fit$I2,
+              H2=fit$H2,
+              tau2=fit$tau2)
+        }, error=function(e) {
+            c(estimate=NA,
+              se=NA,
+              z=NA,
+              p.value=NA,
+              ci.ub=NA,
+              ci.lb=NA,
+              Q=NA,
+              Q.p=NA,
+              I2=NA,
+              H2=NA,
+              tau2=NA)
+        })
     }))
     rownames(ret) <- rownames(estimate)
     colnames(ret)[1] <- "estimate"
