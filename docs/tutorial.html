@@ -1,265 +1,179 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <title>Running an epigenome-wide association study (EWAS) in <code>ewaff</code></title>
-
-<script type="text/javascript">
-window.onload = function() {
-  var imgs = document.getElementsByTagName('img'), i, img;
-  for (i = 0; i < imgs.length; i++) {
-    img = imgs[i];
-    // center an image if it is the only element of its parent
-    if (img.parentElement.childElementCount === 1)
-      img.parentElement.style.textAlign = 'center';
-  }
-};
-</script>
-
-<!-- Styles for R syntax highlighter -->
 <style type="text/css">
-   pre .operator,
-   pre .paren {
-     color: rgb(104, 118, 135)
-   }
-
-   pre .literal {
-     color: #990073
-   }
-
-   pre .number {
-     color: #099;
-   }
-
-   pre .comment {
-     color: #998;
-     font-style: italic
-   }
-
-   pre .keyword {
-     color: #900;
-     font-weight: bold
-   }
-
-   pre .identifier {
-     color: rgb(0, 0, 0);
-   }
-
-   pre .string {
-     color: #d14;
-   }
-</style>
-
-<!-- R syntax highlighter -->
-<script type="text/javascript">
-var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
-hljs.initHighlightingOnLoad();
-</script>
-
-
-
-<style type="text/css">
-body, td {
-   font-family: sans-serif;
-   background-color: white;
-   font-size: 13px;
+/**
+ * Prism.s theme ported from highlight.js's xcode style
+ */
+pre code {
+  padding: 1em;
 }
-
+.token.comment {
+  color: #007400;
+}
+.token.punctuation {
+  color: #999;
+}
+.token.tag,
+.token.selector {
+  color: #aa0d91;
+}
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #1c00cf;
+}
+.token.property,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #c41a16;
+}
+.token.inserted {
+  background-color: #ccffd8;
+}
+.token.deleted {
+  background-color: #ffebe9;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #836c28;
+}
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #5c2699;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+</style>
+<style type="text/css">
 body {
+  font-family: sans-serif;
   max-width: 800px;
   margin: auto;
   padding: 1em;
-  line-height: 20px;
+  line-height: 1.5;
+  box-sizing: border-box;
 }
-
-tt, code, pre {
-   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
 }
-
-h1 {
-   font-size:2.2em;
-}
-
-h2 {
-   font-size:1.8em;
-}
-
-h3 {
-   font-size:1.4em;
-}
-
-h4 {
-   font-size:1.0em;
-}
-
-h5 {
-   font-size:0.9em;
-}
-
-h6 {
-   font-size:0.8em;
-}
-
-a:visited {
-   color: rgb(50%, 0%, 50%);
-}
-
-pre, img {
-  max-width: 100%;
-}
-pre {
-  overflow-x: auto;
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 pre code {
-   display: block; padding: 0.5em;
+  display: block;
+  overflow-x: auto;
 }
-
-code {
-  font-size: 92%;
-  border: 1px solid #ccc;
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
 }
-
-code[class] {
-  background-color: #F8F8F8;
+table {
+  margin: auto;
+  border-top: 1px solid #666;
 }
-
-table, td, th {
-  border: none;
-}
-
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
 blockquote {
-   color:#666666;
-   margin:0;
-   padding-left: 1em;
-   border-left: 0.5em #EEE solid;
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
 }
-
-hr {
-   height: 0px;
-   border-bottom: none;
-   border-top-width: thin;
-   border-top-style: dotted;
-   border-top-color: #999999;
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
 }
 
 @media print {
-   * {
-      background: transparent !important;
-      color: black !important;
-      filter:none !important;
-      -ms-filter: none !important;
-   }
-
-   body {
-      font-size:12pt;
-      max-width:100%;
-   }
-
-   a, a:visited {
-      text-decoration: underline;
-   }
-
-   hr {
-      visibility: hidden;
-      page-break-before: always;
-   }
-
-   pre, blockquote {
-      padding-right: 1em;
-      page-break-inside: avoid;
-   }
-
-   tr, img {
-      page-break-inside: avoid;
-   }
-
-   img {
-      max-width: 100% !important;
-   }
-
-   @page :left {
-      margin: 15mm 20mm 15mm 10mm;
-   }
-
-   @page :right {
-      margin: 15mm 10mm 15mm 20mm;
-   }
-
-   p, h2, h3 {
-      orphans: 3; widows: 3;
-   }
-
-   h2, h3 {
-      page-break-after: avoid;
-   }
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
 }
 </style>
-
-
-
 </head>
-
 <body>
-<div id="toc">
-<div id="toc_header">Table of Contents</div>
+<div class="include-before">
+</div>
+<div class="frontmatter">
+<div class="title"><h1>Running an epigenome-wide association study (EWAS) in <code>ewaff</code></h1></div>
+<div class="author"><h2></h2></div>
+<div class="date"><h3></h3></div>
+</div>
+<div class="body">
+<div id="TOC">
 <ul>
-<li>
-<a href="#toc_0">Running an epigenome-wide association study (EWAS) in &lt;code&gt;ewaff&lt;/code&gt;</a>
+<li><a href="#running-an-epigenome-wide-association-study-ewas-in-ewaff">Running an epigenome-wide association study (EWAS) in <code>ewaff</code></a>
 <ul>
-<li>
-<a href="#toc_1">Preparing R</a>
-</li>
-<li>
-<a href="#toc_2">Load a dataset</a>
-</li>
-<li>
-<a href="#toc_3">Handling outliers</a>
-</li>
-<li>
-<a href="#toc_4">Running the EWAS</a>
-</li>
-<li>
-<a href="#toc_5">Generating an EWAS report</a>
-</li>
-<li>
-<a href="#toc_6">Other kinds of EWAS</a>
-<ul>
-<li>
-<a href="#toc_7">Methylation is not the outcome</a>
-</li>
-<li>
-<a href="#toc_8">Variable of interest is complex</a>
-</li>
-</ul>
-</li>
+<li><a href="#preparing-r">Preparing R</a></li>
+<li><a href="#load-a-dataset">Load a dataset</a></li>
+<li><a href="#handling-outliers">Handling outliers</a></li>
+<li><a href="#running-the-ewas">Running the EWAS</a></li>
+<li><a href="#generating-an-ewas-report">Generating an EWAS report</a></li>
+<li><a href="#other-kinds-of-ewas">Other kinds of EWAS</a></li>
 </ul>
 </li>
 </ul>
 </div>
-
-
-<h2 id="toc_0">Running an epigenome-wide association study (EWAS) in <code>ewaff</code></h2>
-
-<h3 id="toc_1">Preparing R</h3>
-
+<h2 id="running-an-epigenome-wide-association-study-ewas-in-ewaff">Running an epigenome-wide association study (EWAS) in <code>ewaff</code></h2>
+<h3 id="preparing-r">Preparing R</h3>
 <p>We first load the <code>ewaff</code> library.</p>
-
-<pre><code class="r">library(ewaff)
+<pre><code class="language-r">library(ewaff)
 </code></pre>
-
 <p>We indicate how many processors are available for performing analyses.
 If this is not set explicitly, then the default is to use only
 a single processor.</p>
-
-<pre><code class="r">options(mc.cores=4)
+<pre><code class="language-r">options(mc.cores=4)
 </code></pre>
-
-<h3 id="toc_2">Load a dataset</h3>
-
+<h3 id="load-a-dataset">Load a dataset</h3>
 <p>We will in fact generate a random dataset for this demonstration.</p>
-
-<pre><code class="r">set.seed(20171031)
+<pre><code class="language-r">set.seed(20171031)
 n &lt;- 500 ## n samples
 s &lt;- 100  ## s features/cpg sites
 
@@ -276,7 +190,7 @@ r &lt;- runif(s, min=-1, max=1)
 ## with batch effects and associations with the variable
 ## of interest (rows=cpg sites, cols=samples)
 methylation &lt;- t(sapply(r, function(r) {
-    v &lt;- as.numeric(data$variable)
+    v &lt;- sign(data$variable==&quot;A&quot;)
     b &lt;- data$batch
     ## batch effect
     b &lt;- rnorm(unique(b), mean=0, sd=0.2)[b]
@@ -304,23 +218,17 @@ outliers &lt;- cbind(sample(1:nrow(methylation), 10, replace=T),
                   sample(1:ncol(methylation), 10, replace=T))
 methylation[outliers] &lt;- ifelse(rowMeans(methylation)[outliers[,1]] &gt; 0.5, 0, 1)
 </code></pre>
-
-<h3 id="toc_3">Handling outliers</h3>
-
-<p>We use the &#39;iqr&#39; method for handling outliers.5B
-The &#39;iqr&#39; method sets methylation levels that are outside
+<h3 id="handling-outliers">Handling outliers</h3>
+<p>We use the ‘iqr’ method for handling outliers.5B
+The ‘iqr’ method sets methylation levels that are outside
 3*IQR of a CpG site to NA.</p>
-
-<pre><code class="r">methylation &lt;- ewaff.handle.outliers(methylation, method=&quot;iqr&quot;)[[1]]
+<pre><code class="language-r">methylation &lt;- ewaff.handle.outliers(methylation, method=&quot;iqr&quot;)[[1]]
 </code></pre>
-
 <p>We can check that most of the outliers added to the dataset in the simulation
 were set to NA.</p>
-
-<pre><code class="r">## outliers added
+<pre><code class="language-r">## outliers added
 outliers
 </code></pre>
-
 <pre><code>##       [,1] [,2]
 ##  [1,]   74  173
 ##  [2,]   98  452
@@ -333,11 +241,9 @@ outliers
 ##  [9,]   48  148
 ## [10,]   95  135
 </code></pre>
-
-<pre><code class="r">## outliers identified
+<pre><code class="language-r">## outliers identified
 which(is.na(methylation), arr.ind=T)
 </code></pre>
-
 <pre><code>##     row col
 ## s81  81 121
 ## s95  95 135
@@ -348,18 +254,14 @@ which(is.na(methylation), arr.ind=T)
 ## s8    8 409
 ## s98  98 452
 </code></pre>
-
-<p>Some &#39;outliers&#39; were missed because they are not actually outliers.</p>
-
-<h3 id="toc_4">Running the EWAS</h3>
-
+<p>Some ‘outliers’ were missed because they are not actually outliers.</p>
+<h3 id="running-the-ewas">Running the EWAS</h3>
 <p>Now we run the EWAS.  Notice that in this example
-we don&#39;t explicitly include <code>batch</code> as a covariate,
+we don’t explicitly include <code>batch</code> as a covariate,
 although that is possible.
 Here we let surrogate variable analysis (SVA)
 generate batch covariates.</p>
-
-<pre><code class="r">sites.ret &lt;- ewaff.sites(methylation ~ variable + continuous + categorical,
+<pre><code class="language-r">sites.ret &lt;- ewaff.sites(methylation ~ variable + continuous + categorical,
                          variable.of.interest=&quot;variable&quot;,
                          methylation=methylation,
                          data=data,
@@ -368,98 +270,84 @@ generate batch covariates.</p>
                          n.confounders=1,
                          method=&quot;glm&quot;)
 </code></pre>
-
 <pre><code>## Number of significant surrogate variables is:  1 
 ## Iteration (out of 5 ):1  2  3  4  5
 </code></pre>
-
 <p>We show the top 10 associations.</p>
-
-<pre><code class="r">top.idx &lt;- order(sites.ret$table$p.value)[1:10]
+<pre><code class="language-r">top.idx &lt;- order(sites.ret$table$p.value)[1:10]
 sites.ret$table[top.idx,]
 </code></pre>
-
-<pre><code>##         estimate           se          t       p.value   n      p.adjust
-## s7  -0.002167527 1.804655e-05 -120.10757  0.000000e+00 500  0.000000e+00
-## s50  0.081268506 8.003392e-04  101.54258  0.000000e+00 500  0.000000e+00
-## s75 -0.093580406 7.122508e-04 -131.38687  0.000000e+00 500  0.000000e+00
-## s33  0.159574185 2.350343e-03   67.89399 2.474930e-252 500 2.474930e-250
-## s1   0.314147596 4.889542e-03   64.24888 1.025477e-241 500 1.025477e-239
-## s98  0.007285512 1.194706e-04   60.98165 1.634132e-231 499 1.634132e-229
-## s25  0.162049835 3.051587e-03   53.10346 4.395821e-206 500 4.395821e-204
-## s69 -0.177208720 3.392930e-03  -52.22882 4.605431e-203 500 4.605431e-201
-## s17  0.151232349 3.349666e-03   45.14848 2.891114e-177 500 2.891114e-175
-## s59  0.085073236 2.045896e-03   41.58239 2.626082e-163 500 2.626082e-161
+<pre><code>##        estimate           se          t       p.value   n      p.adjust
+## s7   0.00213271 1.805607e-05  118.11594  0.000000e+00 500  0.000000e+00
+## s50 -0.07868680 7.695914e-04 -102.24490  0.000000e+00 500  0.000000e+00
+## s75  0.09976573 7.585788e-04  131.51662  0.000000e+00 500  0.000000e+00
+## s33 -0.16459231 2.516830e-03  -65.39668 4.140361e-245 500 4.140361e-243
+## s1  -0.31685327 4.872176e-03  -65.03322 4.859680e-244 500 4.859680e-242
+## s98 -0.00739083 1.193550e-04  -61.92311 2.071756e-234 499 2.071756e-232
+## s25 -0.16856506 3.189139e-03  -52.85598 3.119356e-205 500 3.119356e-203
+## s69  0.17176635 3.529924e-03   48.66007 2.283911e-190 500 2.283911e-188
+## s27  0.06192653 1.437160e-03   43.08952 2.742106e-169 500 2.742106e-167
+## s59 -0.08562959 2.003567e-03  -42.73858 6.607039e-168 500 6.607039e-166
 </code></pre>
-
 <p>Just for interest, we see if SVA detected batch.</p>
-
-<pre><code class="r">fit &lt;- lm(sites.ret$design[,&quot;sv1&quot;] ~ data$batch)
+<pre><code class="language-r">fit &lt;- lm(sites.ret$design[,&quot;sv1&quot;] ~ data$batch)
 coef(summary(fit))
 </code></pre>
-
 <pre><code>##                Estimate  Std. Error   t value     Pr(&gt;|t|)
-## (Intercept) -0.01082079 0.003532752 -3.062990 2.310223e-03
-## data$batch1  0.01979530 0.004865142  4.068802 5.495376e-05
-## data$batch2  0.01156477 0.004892125  2.363956 1.846466e-02
+## (Intercept) -0.01096824 0.003530798 -3.106448 2.001749e-03
+## data$batch1  0.02012731 0.004862450  4.139334 4.091502e-05
+## data$batch2  0.01165863 0.004889418  2.384462 1.747823e-02
 </code></pre>
-
 <p>It does seem like it did.</p>
-
-<h3 id="toc_5">Generating an EWAS report</h3>
-
-<pre><code class="r">sum.ret &lt;- ewaff.summary(sites.ret, manifest$chr, manifest$pos, methylation,
+<h3 id="generating-an-ewas-report">Generating an EWAS report</h3>
+<pre><code class="language-r">sum.ret &lt;- ewaff.summary(sites.ret, manifest$chr, manifest$pos, methylation,
                          selected.cpg.sites=&quot;s58&quot;)
 </code></pre>
-
-<pre><code>## [ewaff.summary] Thu Jan 27 01:24:53 2022 QQ plots 
-## [ewaff.summary] Thu Jan 27 01:24:53 2022 Manhattan plots 
-## [ewaff.summary] Thu Jan 27 01:24:53 2022 CpG site plots: 11 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s1 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s7 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s17 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s25 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s33 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s50 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s59 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s69 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s75 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s98 
-## [FUN] Thu Jan 27 01:24:53 2022 Plotting s58 
-## [ewaff.summary] Thu Jan 27 01:24:53 2022 Sample characteristics 
-## [ewaff.sample.characteristics] Thu Jan 27 01:24:53 2022 summarizing variables 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 variableB 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 continuous 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical1 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical2 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 categorical3 
-## [summarize.variable] Thu Jan 27 01:24:53 2022 sv1 
-## [ewaff.covariate.associations] Thu Jan 27 01:24:53 2022 covariate associations 
-## [FUN] Thu Jan 27 01:24:53 2022 continuous 
-## [FUN] Thu Jan 27 01:24:53 2022 categorical1 
-## [FUN] Thu Jan 27 01:24:53 2022 categorical2 
-## [FUN] Thu Jan 27 01:24:53 2022 categorical3 
-## [FUN] Thu Jan 27 01:24:53 2022 sv1
+<pre><code>## [ewaff.summary] Tue Jun 25 12:28:24 2024 QQ plots 
+## [ewaff.summary] Tue Jun 25 12:28:24 2024 Manhattan plots 
+## [ewaff.summary] Tue Jun 25 12:28:24 2024 CpG site plots: 11 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s1 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s7 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s25 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s27 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s33 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s50 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s59 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s69 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s75 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s98 
+## [FUN] Tue Jun 25 12:28:24 2024 Plotting s58 
+## [ewaff.summary] Tue Jun 25 12:28:24 2024 Sample characteristics 
+## [ewaff.sample.characteristics] Tue Jun 25 12:28:24 2024 summarizing variables 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 variableB 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 continuous 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 categorical1 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 categorical2 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 categorical3 
+## [summarize.variable] Tue Jun 25 12:28:24 2024 sv1 
+## [ewaff.covariate.associations] Tue Jun 25 12:28:24 2024 covariate associations 
+## [FUN] Tue Jun 25 12:28:24 2024 continuous 
+## [FUN] Tue Jun 25 12:28:24 2024 categorical1 
+## [FUN] Tue Jun 25 12:28:24 2024 categorical2 
+## [FUN] Tue Jun 25 12:28:24 2024 categorical3 
+## [FUN] Tue Jun 25 12:28:24 2024 sv1
 </code></pre>
-
-<pre><code class="r">ewaff.report(sum.ret, output.file=&quot;output/report.html&quot;,
+<pre><code class="language-r">ewaff.report(sum.ret, output.file=&quot;output/report.html&quot;,
              author=&quot;Dom Rand&quot;,
              study=&quot;Associations in my kind of data&quot;)
 </code></pre>
-
-<pre><code>## [ewaff.report] Thu Jan 27 01:24:53 2022 Writing report as html file to output/report.html
+<pre><code>## [ewaff.report] Tue Jun 25 12:28:24 2024 Writing report as html file to output/report.html
 </code></pre>
-
-<h3 id="toc_6">Other kinds of EWAS</h3>
-
-<h4 id="toc_7">Methylation is not the outcome</h4>
-
+<pre><code>## Loading required package: gridExtra
+</code></pre>
+<h3 id="other-kinds-of-ewas">Other kinds of EWAS</h3>
+<h4 id="methylation-is-not-the-outcome">Methylation is not the outcome</h4>
 <p>Methylation does not have to be the outcome variable.
 In fact, any valid GLM model is possible.
 In the following example, we make our binary variable the outcome.</p>
-
-<pre><code class="r">log.ret &lt;- ewaff.sites(variable ~ methylation + continuous + categorical,
-                       variable.of.interest=&quot;variable&quot;,
+<pre><code class="language-r">data$variable01 = sign(data$variable==&quot;A&quot;)
+log.ret &lt;- ewaff.sites(variable01 ~ methylation + continuous + categorical,
+                       variable.of.interest=&quot;variable01&quot;,
                        methylation=methylation,
                        data=data,
                        family=&quot;binomial&quot;,
@@ -468,28 +356,21 @@ In the following example, we make our binary variable the outcome.</p>
                        n.confounders=1,
                        method=&quot;glm&quot;)                     
 </code></pre>
-
 <pre><code>## Number of significant surrogate variables is:  1 
 ## Iteration (out of 5 ):1  2  3  4  5
 </code></pre>
-
 <p>Associations are identical to
 those identified when methylation was the outcome.</p>
-
-<pre><code class="r">table(sites.ret$table$p.adjust &lt; 0.05, log.ret$table$p.adjust &lt; 0.05)
+<pre><code class="language-r">table(sites.ret$table$p.adjust &lt; 0.05, log.ret$table$p.adjust &lt; 0.05)
 </code></pre>
-
 <pre><code>##        
 ##         FALSE TRUE
-##   FALSE    17    0
-##   TRUE      8   75
+##   FALSE    16    0
+##   TRUE      7   77
 </code></pre>
-
-<h4 id="toc_8">Variable of interest is complex</h4>
-
+<h4 id="variable-of-interest-is-complex">Variable of interest is complex</h4>
 <p>The variable of interest may be categorical with more than two categories.</p>
-
-<pre><code class="r">cats.ret &lt;- ewaff.sites(methylation ~ categorical + variable + continuous,
+<pre><code class="language-r">cats.ret &lt;- ewaff.sites(methylation ~ categorical + variable + continuous,
                         variable.of.interest=&quot;categorical&quot;,
                         methylation=methylation,
                         data=data,
@@ -498,34 +379,28 @@ those identified when methylation was the outcome.</p>
                         n.confounders=1,
                         method=&quot;limma&quot;)
 </code></pre>
-
 <pre><code>## Number of significant surrogate variables is:  1 
 ## Iteration (out of 5 ):1  2  3  4  5
 </code></pre>
-
 <p>In this case, an f-statistic and p-value is calculated for the variable
-along with statistics each binary &#39;dummy&#39; variable.</p>
-
-<pre><code class="r">cats.ret$table[1:2,]
+along with statistics each binary ‘dummy’ variable.</p>
+<pre><code class="language-r">cats.ret$table[1:2,]
 </code></pre>
-
 <pre><code>##            f   p.value categorical1.estimate categorical1.se categorical1.t
-## s1 0.1563443 0.9255858          -0.001642581     0.007209047      -0.227850
-## s2 1.5711490 0.1954726           0.001777555     0.001739497       1.021879
+## s1 0.1767259 0.9121571          -0.001994886     0.007176413     -0.2779781
+## s2 1.5418963 0.2027868           0.001482874     0.001636584      0.9060787
 ##    categorical1.p.value categorical2.estimate categorical2.se categorical2.t
-## s1            0.8198571           0.002263977     0.007007019      0.3231013
-## s2            0.3073384          -0.001775241     0.001690749     -1.0499733
+## s1            0.7811455           0.001984101     0.006987262      0.2839597
+## s2            0.3653359          -0.001797667     0.001593449     -1.1281615
 ##    categorical2.p.value categorical3.estimate categorical3.se categorical3.t
-## s1            0.7467552          0.0023652227     0.007058216     0.33510207
-## s2            0.2942437          0.0001363788     0.001703102     0.08007671
+## s1            0.7765602          0.0024931244     0.007042619      0.3540053
+## s2            0.2597993          0.0002118757     0.001606073      0.1319216
 ##    categorical3.p.value   n p.adjust
-## s1            0.7376903 500        1
-## s2            0.9362087 500        1
+## s1            0.7234859 500        1
+## s2            0.8951000 500        1
 </code></pre>
-
 <p>The variable of interest may actuually be multiple variables.</p>
-
-<pre><code class="r">vars.ret &lt;- ewaff.sites(methylation ~ categorical + variable + continuous,
+<pre><code class="language-r">vars.ret &lt;- ewaff.sites(methylation ~ categorical + variable + continuous,
                         variable.of.interest=c(&quot;continuous&quot;,&quot;variable&quot;),
                         methylation=methylation,
                         data=data,
@@ -534,37 +409,36 @@ along with statistics each binary &#39;dummy&#39; variable.</p>
                         n.confounders=1,
                         method=&quot;limma&quot;)
 </code></pre>
-
 <pre><code>## Number of significant surrogate variables is:  1 
 ## Iteration (out of 5 ):1  2  3  4  5
 </code></pre>
-
 <p>Here again, an f-statistic is calcualted along with individual statistics
 for each variable.</p>
-
-<pre><code class="r">vars.ret$table[1:5,]
+<pre><code class="language-r">vars.ret$table[1:5,]
 </code></pre>
-
-<pre><code>##             f       p.value continuous.estimate continuous.se continuous.t
-## s1 2069.57711 7.670475e-241       -0.0009363271  0.0024327999   -0.3848763
-## s2    5.99221  2.683384e-03        0.0003991080  0.0005883500    0.6783514
-## s3   71.33490  6.079467e-28       -0.0008383210  0.0051567687   -0.1625671
-## s4  118.62958  8.418467e-43        0.0001080568  0.0009157912    0.1179928
-## s5  114.03147  1.917764e-41       -0.0007817620  0.0015434795   -0.5064933
+<pre><code>##              f       p.value continuous.estimate continuous.se continuous.t
+## s1 2119.232961 4.050498e-243       -9.330774e-04  0.0024238458   -0.3849574
+## s2    1.240829  2.900440e-01        3.746043e-04  0.0005523450    0.6782072
+## s3   88.799345  1.133802e-33       -6.556652e-04  0.0040375141   -0.1623933
+## s4  152.001930  3.594024e-52        8.924994e-05  0.0007562391    0.1180181
+## s5  121.030019  1.671741e-43       -7.244696e-04  0.0014309037   -0.5063021
 ##    continuous.p.value variableB.estimate variableB.se variableB.t
-## s1          0.7004947        0.314148004  0.004885031   64.308296
-## s2          0.4978666       -0.003990602  0.001181399   -3.377861
-## s3          0.8709258        0.123596290  0.010354725   11.936221
-## s4          0.9061213       -0.028311180  0.001838897  -15.395741
-## s5          0.6127364       -0.046802303  0.003099287  -15.100991
+## s1          0.7004347        -0.31685291  0.004867744  -65.092359
+## s2          0.4979579         0.00159511  0.001109259    1.437996
+## s3          0.8710626        -0.10804985  0.008108430  -13.325619
+## s4          0.9061013         0.02647609  0.001518734   17.432992
+## s5          0.6128704         0.04463645  0.002873645   15.533044
 ##    variableB.p.value   n      p.adjust
-## s1     3.526973e-242 500 7.670475e-239
-## s2      7.882165e-04 500  2.683384e-01
-## s3      4.941532e-29 500  6.079467e-26
-## s4      5.710129e-44 500  8.418467e-41
-## s5      1.228769e-42 500  1.917764e-39
+## s1     1.656168e-244 500 4.050498e-241
+## s2      1.510684e-01 500  1.000000e+00
+## s3      7.944998e-35 500  1.133802e-31
+## s4      2.144654e-53 500  3.594024e-50
+## s5      1.357139e-44 500  1.671741e-41
 </code></pre>
-
+</div>
+<div class="include-after">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
 </body>
-
 </html>
