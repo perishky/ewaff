@@ -177,14 +177,14 @@ ewaff.manhattan.plot <- function(chr, pos, estimates, p.values,
 #' @param data Data frame containing all variables.
 #' @param title Title of the plot.
 #' @param methylation Vector of methylation levels.
-#' @param \code{\link{ggplot}} object showing the scatterplots
+#' @returns \code{\link{ggplot}} object showing the scatterplots
 #' (for continuous variables) or boxplots (for categorical variables) of methylation
 #' vs the variable of interest.  Each plot corresponds to a covariate set.
 #' Methylation levels are in fact residuals from fitting a model with DNA methylation
 #' and the covariates.
 #' 
 #' @export
-ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.threshold=20) {
+ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.threshold=20, do.betareg=FALSE) {
     stopifnot(is.data.frame(data))
     stopifnot(variable.of.interest %in% colnames(data))
     stopifnot(is.vector(methylation))
@@ -217,7 +217,7 @@ ewaff.glm.plot <- function(variable.of.interest, data, methylation, title, bp.th
     stats.desc <- paste(variable.of.interest, "\np[lm]= ", format(p.value.lm, digits=3), sep="")
                         
     has.betareg <- all(c("lmtest", "betareg") %in% rownames(installed.packages()))
-    if (has.betareg) {
+    if (do.betareg && has.betareg) {
         require("betareg")
         require("lmtest")
         ## beta regression model fit
