@@ -129,7 +129,9 @@ ewaff.summary <- function(object, chr, pos, methylation,
     additional.associations <- NULL
     if (object$method != "coxph") {
         msg("Sample characteristics", verbose=verbose)
-        data <- as.data.frame(object$design[,-1])
+        colnames.to.keep <- colnames(object$design)[-1]
+        data <- as.data.frame(object$design[,-1], drop = F)
+        colnames(data) <- colnames.to.keep
         sample.characteristics <- ewaff.sample.characteristics(variable.of.interest, data)
         covariate.associations <- ewaff.covariate.associations(variable.of.interest, data)
         if (!is.null(additional.variables)) {
