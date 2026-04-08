@@ -24,7 +24,6 @@ Depends:
     lmtest,
     sandwich,
     survival,
-    mice,
     metafor
 Imports:
     parallel, 
@@ -44,8 +43,7 @@ Imports:
     statmod,
     sva,
     SmartSVA,
-    survival,
-    mice
+    survival
 Suggests:
     betareg, 
     survminer
