@@ -30,6 +30,8 @@
 #' #' given most variable CpG sites rather than the whole matrix (Default: NULL).
 #' @param random.subset Generate surrogate variables from the
 #' given percentage of randomly selected CpG sites rather than the whole matrix (Default: 0.05, i.e. 5 percent).
+#' @param p.adjust.method Method for adjusting p-values. See \code{\link{p.adjust}} for options.
+#' Available methods include "bonferroni", "BH", "holm", "hochberg", "hommel", "fdr", "BY", "none" (Default: "bonferroni").
 #' @param ... Arguments to \code{\link{glm}}, \code{\link{rlm}}, \code{\link{limma::eBayes}},
 #' or \code{\link{survival::coxph}}.
 #' @return List containing a table of association statistics ('table') and the
@@ -46,6 +48,7 @@ ewaff.sites <- function(formula,
                         n.confounders=NULL,
                         most.variable=NULL,
                         random.subset=0.05,
+                        p.adjust.method="bonferroni",
                         ...) {
 
     stopifnot(method %in% c("glm","rlm","limma","coxph"))
@@ -97,7 +100,7 @@ ewaff.sites <- function(formula,
     else
         stats <- sites.coxph(methylation, design, dependent.variable, ...)
 
-    stats$p.adjust <- p.adjust(stats$p.value, "bonferroni")
+    stats$p.adjust <- p.adjust(stats$p.value, p.adjust.method)
     rownames(stats) <- rownames(methylation)
 
     list(class="sites",

@@ -15,8 +15,8 @@ ewaff.sites(
   n.confounders = NULL,
   most.variable = NULL,
   random.subset = 0.05,
-  ...,
-  debug = F
+  p.adjust.method = "bonferroni",
+  ...
 )
 }
 \arguments{
@@ -54,6 +54,9 @@ or if principal components the maximum number (Default: NULL).}
 
 \item{random.subset}{Generate surrogate variables from the
 given percentage of randomly selected CpG sites rather than the whole matrix (Default: 0.05, i.e. 5 percent).}
+
+\item{p.adjust.method}{Method for adjusting p-values. See \code{\link{p.adjust}} for options.
+Available methods include "bonferroni", "BH", "holm", "hochberg", "hommel", "fdr", "BY", "none" (Default: "bonferroni").}
 
 \item{...}{Arguments to \code{\link{glm}}, \code{\link{rlm}}, \code{\link{limma::eBayes}},
 or \code{\link{survival::coxph}}.}

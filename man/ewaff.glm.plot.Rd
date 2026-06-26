@@ -9,7 +9,8 @@ ewaff.glm.plot(
   data,
   methylation,
   title,
-  bp.threshold = 20
+  bp.threshold = 20,
+  do.betareg = FALSE
 )
 }
 \arguments{
@@ -20,12 +21,13 @@ ewaff.glm.plot(
 \item{methylation}{Vector of methylation levels.}
 
 \item{title}{Title of the plot.}
-
-\item{\code{\link{ggplot}}}{object showing the scatterplots
+}
+\value{
+\code{\link{ggplot}} object showing the scatterplots
 (for continuous variables) or boxplots (for categorical variables) of methylation
 vs the variable of interest.  Each plot corresponds to a covariate set.
 Methylation levels are in fact residuals from fitting a model with DNA methylation
-and the covariates.}
+and the covariates.
 }
 \description{
 Plots GLM regression of a CpG site
